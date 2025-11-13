@@ -2,13 +2,10 @@
 
 <?= $this->section('content') ?>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="mb-4">Selamat Datang di AppQurban V3</h1>
-            <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i> Setup berhasil! AdminLTE3 sudah terpasang.
-            </div>
-        </div>
+    <div class="content-wrapper p-4">
+        <h3>Selamat datang, <?= esc($session['nama']) ?> 👋</h3>
+        <p>Role ID: <?= esc($session['role_id']) ?></p>
+        <a href="<?= base_url('logout') ?>" class="btn btn-danger">Logout</a>
     </div>
 </div>
 <?= $this->endSection() ?>
