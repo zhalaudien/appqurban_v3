@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="<?= base_url('assets/adminlte3/dist/css/adminlte.min.css') ?>">
 </head>
 
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+</script>
+
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 

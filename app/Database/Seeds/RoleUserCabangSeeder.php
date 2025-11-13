@@ -10,13 +10,13 @@ class RoleUserCabangSeeder extends Seeder
     {
         // === Insert Roles ===
         $roles = [
-            ['name' => 'Super Admin', 'description' => 'Akses penuh semua modul'],
-            ['name' => 'Admin Penerimaan', 'description' => 'Mengelola penerimaan hewan qurban'],
-            ['name' => 'Admin Kandang', 'description' => 'Update data penyembelihan harian'],
-            ['name' => 'Admin K3', 'description' => 'Kelola data kepala, kaki, kulit hewan'],
-            ['name' => 'Admin Besek', 'description' => 'Update produksi dan stok besek'],
-            ['name' => 'Admin Cabang', 'description' => 'Input pequrban dan permintaan cabang'],
-            ['name' => 'Admin BUMM', 'description' => 'Lihat data pequrban dari BUMM'],
+            ['name' => 'superadmin', 'description' => 'Akses penuh semua modul'],
+            ['name' => 'adminpenerimaan', 'description' => 'Mengelola penerimaan hewan qurban'],
+            ['name' => 'adminkandang', 'description' => 'Update data penyembelihan harian'],
+            ['name' => 'admink3', 'description' => 'Kelola data kepala, kaki, kulit hewan'],
+            ['name' => 'adminbesek', 'description' => 'Update produksi dan stok besek'],
+            ['name' => 'admincabang', 'description' => 'Input pequrban dan permintaan cabang'],
+            ['name' => 'adminbumm', 'description' => 'Lihat data pequrban dari BUMM'],
         ];
         $this->db->table('roles')->insertBatch($roles);
 

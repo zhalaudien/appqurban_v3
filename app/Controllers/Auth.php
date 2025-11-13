@@ -3,55 +3,64 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use App\Models\RoleModel;
 use CodeIgniter\Controller;
 
 class Auth extends Controller
 {
     public function login()
     {
-        helper(['form']);
-        echo view('auth/login');
+        return view('auth/login');
     }
 
     public function doLogin()
     {
-        $session = session();
-        $model = new UserModel();
+        $userModel = new UserModel();
 
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
 
-        $user = $model->where('username', $username)->first();
+        // ✅ gunakan variabel lokal, bukan $this->userModel
+        $user = $userModel
+            ->select('users.*, roles.name as role')
+            ->join('roles', 'roles.id = users.role_id')
+            ->where('username', $username)
+            ->first();
 
-        if ($user) {
-            $pass = $user['password'];
-            $verify_pass = password_verify($password, $pass);
+        if ($user && password_verify($password, $user['password'])) {
 
-            if ($verify_pass) {
-                $sessionData = [
-                    'user_id'   => $user['id'],
-                    'nama'      => $user['nama'],
-                    'username'  => $user['username'],
-                    'role_id'   => $user['role_id'],
-                    'cabang_id' => $user['cabang_id'],
-                    'logged_in' => TRUE
-                ];
-                $session->set($sessionData);
+            // Set session sesuai hasil join (roles.nama)
+            session()->set([
+                'user_id'    => $user['id'],
+                'username'   => $user['username'],
+                'role'       => $user['role'],   // harus string: superadmin, admincabang, dst.
+                'isLoggedIn' => true
+            ]);
 
-                return redirect()->to('/dashboard');
-            } else {
-                $session->setFlashdata('msg', 'Password salah.');
-                return redirect()->to('/login');
+            // Redirect sesuai role
+            switch ($user['role']) {
+                case 'superadmin':
+                    return redirect()->to('/superadmin/cabang');
+                case 'admincabang':
+                    return redirect()->to('/dashboard');
+                default:
+                    return redirect()->to('/dashboard');
             }
-        } else {
-            $session->setFlashdata('msg', 'User tidak ditemukan.');
-            return redirect()->to('/login');
         }
+
+        return redirect()->back()->with('error', 'Username atau password salah');
     }
 
     public function logout()
     {
         session()->destroy();
         return redirect()->to('/login');
+    }
+
+    public function unauthorized()
+    {
+        return view('errors/custom_unauthorized', [
+            'message' => 'Anda tidak memiliki akses ke halaman ini.'
+        ]);
     }
 }

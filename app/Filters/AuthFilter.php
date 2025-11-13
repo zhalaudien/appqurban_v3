@@ -11,18 +11,16 @@ class AuthFilter implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         $session = session();
-        if (!$session->get('logged_in')) {
-            return redirect()->to('/login');
-        }
 
-        // Jika ada role tertentu yang dibutuhkan
-        if ($arguments && !in_array($session->get('role_id'), $arguments)) {
-            return redirect()->to('/unauthorized');
+        if (!$session->get('isLoggedIn')) {
+            // ✅ gunakan getUri() bukan $uri langsung
+            $currentURL = $request->getUri()->getPath();
+            return redirect()->to('/login')->with('redirect_to', $currentURL);
         }
     }
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
-        // Tidak digunakan
+        //
     }
 }
